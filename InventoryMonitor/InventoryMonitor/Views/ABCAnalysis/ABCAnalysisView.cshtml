@@ -1,0 +1,89 @@
+﻿@*
+ 
+*@
+@{
+}
+@model InventoryMonitor.Models.ABCAnalysisViewModel
+
+
+<!-- Add a button to scroll to the bottom -->
+<button id="scrollToBottom" class="btn btn-primary" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+    ⬇ Scroll to Bottom
+</button>
+
+
+
+
+<h2>ABC Analysis Results</h2>
+
+<table class="table" style="color:white">
+    <thead>
+        <tr>
+            <th>Item Code</th>
+            <th>Sales Year</th>
+            <th>Total Value</th>
+            <th>Cumulative Value</th>
+            <th>Cumulative Percentage</th>
+            <th>Category</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ItemResults)
+        {
+            <tr>
+                <td>@item.ItemCode</td>
+                <td>@item.SalesYear</td>
+                <td>@item.TotalValue.ToString("N2")</td>
+                <td>@item.CumulativeValue.ToString("N2")</td>
+                <td>@item.CumulativePercentage.ToString("N2") %</td>
+                <td>@item.Category</td>
+            </tr>
+        }
+
+        <!-- Total Row -->
+        <tr class="font-weight-bold">
+            <td colspan="2">Total</td>
+            <td>@Model.OverallTotalValue.ToString("C")</td>
+            <td colspan="3"></td>
+        </tr>
+    </tbody>
+</table>
+
+
+<h2>Category Summary</h2>
+
+<!-- Summary Table -->
+<table class="table" style="color:white">
+    <thead>
+        <tr>
+            <th>Category</th>
+            <th>Item Count</th>
+            <th>Contribution Percentage</th>
+            <th>Contribution Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var summary in Model.CategorySummary)
+        {
+            <tr>
+                <td>@summary.Category</td>
+                <td>@summary.ItemCount</td>
+                <td>@summary.ContributionPercentage.ToString("N2") %</td>
+                <td>@summary.ContributionValue.ToString("N2")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+<!-- JavaScript for scrolling -->
+<script>
+    document.getElementById('scrollToBottom').addEventListener('click', function () {
+        // Scroll to the bottom of the page
+        window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: 'smooth' // Adds smooth scrolling effect
+        });
+    });
+</script>

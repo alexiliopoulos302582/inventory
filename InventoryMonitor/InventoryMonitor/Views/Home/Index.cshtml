@@ -1,0 +1,261 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<!-- TempData Area for Notifications -->
+@if (TempData["ConnectionResult"] != null || TempData["ABCAnalysisResult"] != null || TempData["StoredProcedureResult"] != null)
+{
+    <div class="alert alert-info mt-3">
+        @TempData["ConnectionResult"]
+        @TempData["ABCAnalysisResult"]
+        @TempData["StoredProcedureResult"]
+    </div>
+}
+
+ 
+<body >
+
+
+    <div class="container d-flex flex-wrap">
+
+        <div class="hover-effect p-2" style="margin-top:50px">
+
+            <!-----------------  ABC Analysis Section---------------  -->
+                   <h4>ABC Analysis</h4>
+                   <form asp-controller="ABCAnalysis" asp-action="GetABCAnalysis" method="post">
+        <div class="d-flex align-items-center">
+
+            <label for="startDate" class="mr-2" style="margin-right:25px">Start Date:</label>
+            <input type="date" id="startDate" name="startDate"
+                   class="form-control form-control-sm mr-3" style="width: 150px; margin-right:25px" required />
+
+
+            <label for="endDate" class="mr-2" style="margin-right:25px ;color:white">End Date:</label>
+            <input type="date" id="endDate" name="endDate"
+                   class="form-control form-control-sm mr-3"
+                   style="width: 150px;margin-right:60px" required />
+
+
+            <button type="submit" class="btn btn-success  btn-sm">Get ABC Analysis</button>
+
+        </div>
+    </form>
+
+        </div>
+
+        <!-----------------  XYZ Analysis Section---------------  -->
+        <div class="hover-effect p-2">
+                <h4 class="">XYZ Analysis</h4>
+                <form asp-controller="XYZAnalysis" asp-action="GetXYZAnalysis" method="post">
+
+        <div class="d-flex align-items-center">
+            <!-- Start Date -->
+            <label for="startDate" class="mr-2" style="margin-right:25px">Start Date:</label>
+            <input type="date" id="startDate" name="startDate"
+                   class="form-control form-control-sm mr-3" style="width: 150px; margin-right:25px" required />
+
+            <!-- End Date -->
+            <label for="endDate" class="mr-2" style="margin-right:25px">End Date:</label>
+            <input type="date" id="endDate" name="endDate"
+                   class="form-control form-control-sm mr-3"
+                   style="width: 150px;margin-right:60px" required />
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-success btn-sm">Get XYZ Analysis</button>
+        </div>
+                 </form>
+        </div>
+
+
+
+
+        <!---------------------- Combined Analysis Section----------------- -->
+
+        <div class="hover-effect p-2">
+            <h4>Combined Analysis</h4>
+
+            <form asp-controller="ABXAnalysis" asp-action="GetABXAnalysis" method="get">
+                <div class="d-flex align-items-center">
+                    <!-- Start Date Input -->
+                    <label for="startDate" class="mr-2" style="margin-right:25px">Start Date:</label>
+                    <input type="date" id="startDate" name="startDate" class="form-control form-control-sm mr-3" style="width: 150px; margin-right:25px" required />
+
+                    <!-- End Date Input -->
+                    <label for="endDate" class="mr-2" style="margin-right:25px">End Date:</label>
+                    <input type="date" id="endDate" name="endDate" class="form-control form-control-sm mr-3" style="width: 150px; margin-right:60px" required />
+
+                    <!-- Submit Button to Go to ABX Analysis -->
+                    <button type="submit" class="btn btn-primary btn-sm">
+                       Combined ABC-XYZ
+                    </button>
+                </div>
+            </form>
+        </div>
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+    <!-- Error Message Display -->
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger mt-3">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+
+    <div class="container d-flex flex-wrap" style="margin-top:60px">
+
+        <!-- Monthly Sales Table Section -->
+        <div class="mt-5 mb-3 col-12 col-md-4 col-lg-3 hover-effect p-2">
+
+            <h4>Monthly Sales Table</h4>
+            <form asp-controller="MonthlySales" asp-action="Index" method="get">
+                <div class=" ">
+                    <!-- Start Date -->
+                    <label for="startDate" class="mr-2 mb-2">Start Date:</label>
+                    <input type="date" id="startDate" name="startDate"
+                           class="form-control form-control-sm mb-3" style="width: 70%; max-width: 250px;" required />
+
+                    <!-- End Date -->
+                    <label for="endDate" class="mr-2 mb-2">End Date:</label>
+                    <input type="date" id="endDate" name="endDate"
+                           class="form-control form-control-sm mb-3"
+                           style="width: 70%; max-width: 250px;" required />
+                </div>
+                <button type="submit" class="btn btn-success mt-3 btn-sm " style="width:70%">
+                    Monthly Sales Table
+                </button>
+            </form>
+        </div>
+
+
+
+        <!-- Get Product Sales Section -->
+        <div class="mt-5 mb-3 col-12 col-md-3 col-lg-3  ">
+            <div class="hover-effect p-1 d-flex flex-column align-items-start"
+                 style="border: 1px solid transparent; padding: 5px;">
+            <h4>Get Product Sales</h4>
+            <form asp-controller="MonthlySales" asp-action="ProductSales" method="post">
+                <div class="form-group">
+                    <label class="m-1 mb-2" for="itemCode">Enter Item Code:</label>
+                    <input type="text" id="itemCode" name="itemCode" class="form-control m-1" style="width: 70%; max-width: 300px;" required />
+                </div>
+                <button type="submit" class="btn btn-success m-1 btn-sm" style="width:70%">Get Sales Data</button>
+            </form>
+        </div>
+        </div>
+
+
+
+
+        <!-- Inventory KPI Table Section -->
+        <div id="updateBalancesSection" class="mt-5 mb-0 col-12 col-md-4 col-lg-3 hover-effect p-1">
+            <h4>Inventory KPI Table</h4>
+            <form asp-controller="InventoryKpi" asp-action="UpdateBalances" method="post" class="d-flex align-items-center">
+                <div  >
+                    <!-- Year Input -->
+                    <label for="year" class="mb-2" >Update balances for year:</label>
+                    <input  type="number" id="year" name="year" class="form-control form-control-sm mb-3" style="width: 60%; " required min="2000" max="2100" />
+                </div>
+                <div style="margin-left: -50px;">
+                    <button type="submit" class="btn btn-success btn-sm mt-3">
+                        Run Update
+                    </button>
+                </div>
+            </form>
+
+            <form asp-controller="InventoryKpi" asp-action="Index" method="get">
+                <div>
+                    <!-- Start Date -->
+                    <label for="startDate" class="mr-2 mb-2">Start Date:</label>
+                    <input type="date" id="startDate" name="startDate"
+                           class="form-control form-control-sm mb-3" style="width: 67%; max-width: 250px;" required />
+                    <!-- End Date -->
+                    <label for="endDate" class="mr-2 mb-2">End Date:</label>
+                    <input type="date" id="endDate" name="endDate"
+                           class="form-control form-control-sm mb-3"
+                           style="width: 67%; max-width: 250px;" required />
+                </div>
+                <button type="submit" class="btn btn-success mt-3 btn-sm" style="width: 67%">
+                    Inventory KPI Table
+                </button>
+            </form>
+        </div>
+
+        <!-- Sales Trend Analysis Section -->
+        <div id="updateBalancesSection" class="mt-5 mb-0 col-12 col-md-4 col-lg-3   ">
+            
+            <div class="hover-effect p-1 d-flex flex-column align-items-start"
+                 style="border: 1px solid transparent; padding: 5px;">
+                <h4 style="margin-bottom: 5px;">Sales Trend Analysis</h4>
+                <form asp-controller="SalesTrend" asp-action="Index" method="get">
+                    <button type="submit" class="btn btn-success btn-sm mt-3" style="width: 120%;">
+                        Go to Sales Trend Analysis
+                    </button>
+                </form>
+            </div>
+        </div>
+
+
+
+        <!-- Days In Inventory Averages Section -->
+        <div id="updateBalancesSection" class="mt-5 mb-0 col-12 col-md-4 col-lg-3   ">
+
+            <div class="hover-effect p-1 d-flex flex-column align-items-start"
+                 style="border: 1px solid transparent; padding: 5px;">
+                <h4 style="margin-bottom: 5px;">Average Days In Inventory</h4>
+                <form asp-controller="DaysInInventoryAverages" asp-action="DaysInInventoryAverages" method="get">
+                    <button type="submit" class="btn btn-success btn-sm mt-3" style="width: 130%;">
+                        View Average Days In Inventory
+                    </button>
+                </form>
+            </div>
+        </div>
+       
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+
+
+</body>
+
+<script>
+    // Check if the URL contains the specific anchor
+    if (window.location.hash) {
+        // Scroll to the element with the specific id
+        var element = document.querySelector(window.location.hash);
+        if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+        }
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+

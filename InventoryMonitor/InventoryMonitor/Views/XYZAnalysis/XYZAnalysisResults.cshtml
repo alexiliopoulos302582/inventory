@@ -1,0 +1,45 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model List<InventoryMonitor.Models.XYZAnalysisResult>
+
+
+
+
+<table class="table" style="color:white">
+    <thead>
+        <tr>
+            <th>Item Code</th>
+            <th>Description</th>
+            <th>Standard Deviation</th>
+            <th>Average Quantity</th>
+            <th>Coefficient of Variation</th>
+            <th>Characterization</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var result in Model)
+            {
+                <tr>
+                    <td>@result.ItemCode</td>
+                    <td>@result.Description</td>
+                    <td>@(result.StandardDeviation?.ToString("N2") ?? "N/A")</td>
+                    <td>@(result.AverageQuantity?.ToString("N2") ?? "N/A")</td>
+                    <td>@(result.CoefficientOfVariation?.ToString("P2") ?? "N/A")</td>
+                    <td>@result.Characterization</td> <!-- Display the Characterization -->
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" class="text-center">No data available for the selected period.</td>
+            </tr>
+        }
+    </tbody>
+</table>

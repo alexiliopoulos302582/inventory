@@ -1,0 +1,115 @@
+﻿@model IEnumerable< InventoryMonitor.Models.InventoryKpi>
+
+@{
+   // Layout = null; // This removes the layout for this page
+}
+
+
+@{
+    ViewData["Title"] = "Inventory KPIs";
+}
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monthly Sales</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Ensuring the table is responsive */
+        /* Ensuring the table is responsive */
+        .table {
+            width: 100%; /* Ensure the table takes full width */
+            table-layout: auto; /* This will allow the table columns to adjust based on content */
+        }
+
+        th, td {
+            word-wrap: break-word; /* Ensures content wraps properly if it’s too long */
+            text-align: center; /* Aligns content to the center of each cell */
+        }
+
+        th {
+            background-color: #f8f9fa; /* Adds a light background to headers */
+            text-align: center; /* Center the text horizontally */
+            vertical-align: middle; /* Center the text vertically */
+            padding: 10px; /* Add padding for better readability */
+        }
+
+        /* Additional styling to prevent text overflow and keep the table clean */
+        td {
+            max-width: 150px; /* Ensures that the text in the table cells doesn't overflow */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 10px; /* Padding for table data cells */
+        }
+
+    </style>
+</head>
+<body style="margin-right:25px;background-color:whitesmoke">
+
+
+
+    <div class="container-fluid" style="margin-left:30px">
+
+
+      @*   <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a> *@
+
+        <h1 style="color:white">Inventory KPIs</h1>
+        <div class="table-responsive" style="color:white">
+            <table class="table table-striped" style="color:white">
+                <thead>
+                    <tr>
+                        <th>Item Code</th>
+                        <th>Standard Cost Per Unit</th>
+                        <th>Average Sales Price Per Unit</th>
+                       @*  <th>Stock On Hand</th> *@
+                        <th>Inventory At Beginning Of Period</th>
+                        <th>Inventory At End Of Period</th>
+                        <th>Number Of Goods Sold Yearly</th>
+                        <th>Average Daily Sold</th>
+                        <th>Cost Of Goods Sold</th>
+                        <th>Sales</th>
+                        <th>Gross Margin</th>
+                        <th>Average Inventory</th>
+                        <th>Inventory Turns</th>
+                        <th>Days On Hand</th>
+                       @*  <th>Days Of Sales</th> *@
+                        <th>GMROI</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr style="color:white">
+                            <td>@item.ItemCode</td>
+                            <td>@item.StandardCostPerUnit</td>
+                            <td>@item.AverageSalesPricePerUnit</td>
+                          @*   <td>@item.StockOnHand</td> *@
+                            <td>@item.InventoryAtBeginningOfPeriod</td>
+                            <td>@item.InventoryAtEndOfPeriod</td>
+                            <td>@item.NumberOfGoodsSoldYearly</td>
+                            <td>@item.AverageDailySold</td>
+                            <td>@item.CostOfGoodsSold</td>
+                            <td>@item.Sales</td>
+                            <td>@item.GrossMargin</td>
+                            <td>@item.AverageInventory</td>
+                            <td>@item.InventoryTurns</td>
+                            <td>@item.DaysOnHand</td>
+                            @* <td>@item.DaysOfSales</td> *@
+                            <td>@item.Gmroi</td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,104 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IEnumerable<InventoryMonitor.Models.DaysInInventoryAverages>
+
+@{
+    ViewData["Title"] = "Days In Inventory Averages";
+}
+
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+<!-- DataTables JavaScript -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<h3 class="mb-3">Days In Inventory Averages</h3>
+
+<div class="container d-flex " style="margin-top:10px">
+
+<div style="margin-right:100px">
+<!-- Input Form -->
+
+<form asp-controller="DaysInInventoryAverages" asp-action="RunStoredProcedure" method="post" style="color:white; margin-top: 20px;margin-bottom:30px">
+    <div class="form-group" style="margin-bottom: 10px;">
+        <label for="itemCode" style="display: inline-block; width: 120px;">Item Code:</label>
+        <input type="text" id="itemCode" name="ItemCode" class="form-control" style="display: inline-block; width: 300px;" required />
+    </div>
+    <div class="form-group" style="margin-bottom: 10px;">
+        <label for="startDate" style="display: inline-block; width: 120px;">Start Date:</label>
+        <input type="date" id="startDate" name="StartDate" class="form-control" style="display: inline-block; width: 300px;" required />
+    </div>
+    <div class="form-group" style="margin-bottom: 10px;">
+        <label for="endDate" style="display: inline-block; width: 120px;">End Date:</label>
+        <input type="date" id="endDate" name="EndDate" class="form-control" style="display: inline-block; width: 300px;" required />
+    </div>
+    <button type="submit" class="btn btn-success btn-sm" style="margin-top: 10px;">Update for itemcode</button>
+</form>
+
+
+</div>
+<div>
+    <!-- Form for Running Procedure for All Items -->
+    <form asp-controller="DaysInInventoryAverages" asp-action="RunStoredProcedureForAll" method="post" style="color:white; margin-top: 20px;">
+        <div class="form-group" style="margin-bottom: 10px;">
+            <label for="startDateAll" style="display: inline-block; width: 120px;">Start Date:</label>
+            <input type="date" id="startDateAll" name="StartDate" class="form-control" style="display: inline-block; width: 300px;" required />
+        </div>
+        <div class="form-group" style="margin-bottom: 10px;">
+            <label for="endDateAll" style="display: inline-block; width: 120px;">End Date:</label>
+            <input type="date" id="endDateAll" name="EndDate" class="form-control" style="display: inline-block; width: 300px;" required />
+        </div>
+        <button type="submit" class="btn btn-success btn-sm" style="margin-top: 10px;">Update All Items</button>
+    </form>
+
+</div>
+
+
+</div>
+
+
+
+<table id="inventoryTable" class="table table-striped" style="color:white">
+    <thead>
+        <tr style="color:white">
+            <th>Item Code</th>
+            <th>Description</th>
+            <th>Average</th>
+            <th>Min Days</th>
+            <th>Max Days</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr style="color:white">
+                <td>@item.ItemCode</td>
+                <td>@item.Description</td>
+                <td>@item.Average</td>
+                <td>@item.MinDays</td>
+                <td>@item.MaxDays</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+ 

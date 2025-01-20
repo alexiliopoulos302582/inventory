@@ -1,0 +1,454 @@
+﻿@{
+   // Layout = null; // This removes the layout for this page
+}
+
+@model InventoryMonitor.Models.MonthlySale
+
+@{
+    ViewData["Title"] = "Product Sales Result";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monthly Sales</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Ensuring the table is responsive */
+        .table {
+            width: 100%;
+            table-layout: fixed; /* This ensures the columns stay in a fixed size */
+        }
+
+        th, td {
+            word-wrap: break-word; /* Ensures content wraps properly if it’s too long */
+            text-align: center; /* Aligns content to the center of each cell */
+        }
+
+        th {
+            background-color: #f8f9fa; /* Adds a light background to headers */
+            text-align: center; /* Center the text horizontally */
+            vertical-align: middle; /* Center the text vertically */
+            padding: 10px; /* Add padding for better readability */
+        }
+
+        /* Additional styling to prevent text overflow and keep the table clean */
+        td {
+            max-width: 150px; /* Ensures that the text in the table cells doesn't overflow */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 10px; /* Padding for table data cells */
+        }
+
+        
+        /* Override styles for input fields and dropdown menus */
+        input[type="text"],
+        input[type="number"],
+        select.form-select {
+            background-color: white !important; /* Set background to white */
+            color: black !important; /* Set text color to black */
+        }
+
+            /* Optional: Add focus styles for better UX */
+            input[type="text"]:focus,
+            input[type="number"]:focus,
+            select.form-select:focus {
+                background-color: #f8f9fa; /* Slightly darker white for focus */
+                border-color: #007bff; /* Bootstrap's blue border for focus */
+                outline: none; /* Remove default outline */
+            }
+    
+    </style>
+</head>
+<body style="margin-right:25px;background-color:whitesmoke ;color:white">
+    <div class="container-fluid" style="margin-left:30px">
+
+       @*  <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a> *@
+        <h2 style="margin-top:80px;color:white ">Sales Data for @Model.ItemCode</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered" style="margin-top:80px;color:white">
+                <thead>
+                    <tr>
+                        <th>Item Code</th>
+                        <th>Avg Lead Time (Days)</th>
+                        <th>January</th>
+                        <th>February</th>
+                        <th>March</th>
+                        <th>April</th>
+                        <th>May</th>
+                        <th>June</th>
+                        <th>July</th>
+                        <th>August</th>
+                        <th>September</th>
+                        <th>October</th>
+                        <th>November</th>
+                        <th>December</th>
+                        <th>Standard Cost</th>
+                        <th>Ordering Frequency (Per Month)</th>
+                        @*    <th>Year</th> *@
+                        <th>Yearly Quantity Demand</th>
+                        <th>Average Monthly Demand</th>
+                        <th>Average Daily Demand</th>
+                        <th>Standard Deviation of Monthly Demand</th>
+                        <th>Coefficient of Variance</th>
+                        <th>Average Lead Time (Months)</th>
+                        <th>Expected Service Level</th>
+                        <th>Service Level Factor (Z)</th>
+                        <th>Safety Stock</th>
+                        <th>Reorder Point</th>
+                        <th>Economic Order Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="color:white">
+                        <td>@Model.ItemCode</td>
+                        <td id="leadTimeInDays">@Model.AvgLeadTimeinDays</td>
+                        <td>@Model.January</td>
+                        <td>@Model.February</td>
+                        <td>@Model.March</td>
+                        <td>@Model.April</td>
+                        <td>@Model.May</td>
+                        <td>@Model.June</td>
+                        <td>@Model.July</td>
+                        <td>@Model.August</td>
+                        <td>@Model.September</td>
+                        <td>@Model.October</td>
+                        <td>@Model.November</td>
+                        <td>@Model.December</td>
+                        <td>@Model.StandardCost</td>
+                        <td>@Model.OrderingFrequencyPerMonth</td>
+                        @*  <td>@Model.Year</td> *@
+                        <td id="yearlyQuantityDemand">@Model.YearlyQuantityDemand</td>
+                        <td id="avgMonthlyDemand">@Model.AverageMonthlyDemand</td>
+                        <td id="avgDailyDemand">@Model.AverageDailyDemand</td>
+                        <td>@Model.StandardDeviationOfMonthlyDemand</td>
+                        <td>@Model.CoefficientOfVariance</td>
+                        <td id="avgLeadTimeInMonths">@Model.AverageLeadTimeInMonths</td>
+                        <td>@Model.ExpectedServiceLevel</td>
+                        <td id="serviceLevelFactor">@Model.ServiceLevelFactorZ</td>
+                        <td id="safetyStock">@Model.SafetyStock</td>
+                        <td id="reorderPoint">@Model.ReorderPoint</td>
+                        <td>@Model.EconomicOrderQuantity</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <hr />
+        <!-- Dropdown for Service Level Percentage -->
+        <div class="row">
+            <div class="service-level-dropdown col-2">
+                <label for="serviceLevelSelect" class="form-label">Select Service Level (%)</label>
+                <select id="serviceLevelSelect" class="form-select" style="color:black">
+                    <option value="1.04">85%</option>
+                    <option value="1.08">86%</option>
+                    <option value="1.13">87%</option>
+                    <option value="1.17">88%</option>
+                    <option value="1.23">89%</option>
+                    <option value="1.28">90%</option>
+                    <option value="1.34">91%</option>
+                    <option value="1.41">92%</option>
+                    <option value="1.48">93%</option>
+                    <option value="1.55">94%</option>
+                    <option value="1.64">95%</option>
+                    <option value="1.75">96%</option>
+                    <option value="1.88">97%</option>
+                    <option value="2.05">98%</option>
+                    <option value="2.33">99%</option>
+                    <option value="2.58">99.50%</option>
+                    <option value="2.65">99.60%</option>
+                    <option value="2.75">99.70%</option>
+                    <option value="2.88">99.80%</option>
+                    <option value="3.09">99.90%</option>
+                    <option value="3.72">99.99%</option>
+                </select>
+            </div>
+            <div class="mb-3 col-2">
+                <label for="zFactorDisplay" class="form-label">Selected Z-Factor</label>
+                <input style="color:white" type="text" id="zFactorDisplay" class="form-control" readonly value="1.28" />
+            </div>
+        </div>
+
+        <form style = "margin-bottom:50px" method="post" action="/MonthlySales/UpdateValues">
+            <!-- Hidden field to pass ItemCode to the server -->
+            <input type="hidden" name="ItemCode" value="@Model.ItemCode" />
+            <!-- Hidden fields to pass Z-Factor and Service Level -->
+            <input type="hidden" id="zFactorInput" name="ZFactor" />
+            <input type="hidden" id="expectedServiceLevelInput" name="ExpectedServiceLevel" />
+            <div class="row">
+                <!-- Calculated Values -->
+                <div class="  mb-3 col-2">
+                    <label for="safetyStockInput" class="form-label">Safety Stock</label>
+                    <input type="text" name="SafetyStock" id="safetyStockInput" class="form-control" readonly value="@Model.SafetyStock" />
+                </div>
+                <div class="mb-3 col-2">
+                    <label for="reorderPointInput" class="form-label">Reorder Point</label>
+                    <input type="text" name="ReorderPoint" id="reorderPointInput" class="form-control" readonly value="@Model.ReorderPoint" />
+                </div>
+            </div>
+            <!-- Buttons -->
+            <button type="button" id="calculateBtn" class="btn btn-primary btn-sm" style="margin-right:30px">Calculate S.Stock - R.O.P</button>
+            <button type="submit" class="btn btn-success btn-sm">Update S.Stock - R.O.P</button>
+        </form>
+
+        <hr />
+
+        <form style="margin-bottom:50px" method="post" action="@Url.Action("UpdateEOQ", "MonthlySales")">
+            <!-- Hidden field to pass ItemCode to the server -->
+            <input type="hidden" name="ItemCode" value="@Model.ItemCode" />
+
+            <div class="row">
+                <!-- Ordering Cost Section -->
+                @* <h5>Ordering cost refers to the expenses associated with placing an order for new inventory items</h5> *@
+                <div class="col-md-2">
+                    <label for="wages">Wages</label>
+                    <input type="number" id="wages" name="wages" class="form-control" step="0.01">
+                </div>
+                <div class="col-md-2">
+                    <label for="utilityExpenses">Utility Expenses</label>
+                    <input type="number" id="utilityExpenses" name="utilityExpenses" class="form-control" step="0.01">
+                </div>
+                <div class="col-md-2">
+                    <label for="procurementExpenses">Procurement Expenses</label>
+                    <input type="number" id="procurementExpenses" name="procurementExpenses" class="form-control" step="0.01">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="ordersPerMonth">Orders per Month</label>
+                    <input type="number" id="ordersPerMonth" name="ordersPerMonth" class="form-control" step="0.01">
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-2">
+                        <label for="finalOrderingCostPerOrder">Final Ordering Cost per Order</label>
+                        <input type="number" id="finalOrderingCostPerOrder" name="finalOrderingCostPerOrder" class="form-control" readonly step="0.01">
+                    </div>
+                </div>
+                <hr class="mt-3" />
+
+                <!-- Carrying Cost Section -->
+               @*  <h5 class="mt-3">Carrying cost refers to the expenses associated with holding and storing inventory over a specific time period</h5> *@
+                <div class="col-md-2">
+                    <label for="warehousingCosts">Warehousing Costs</label>
+                    <input type="number" id="warehousingCosts" name="warehousingCosts" class="form-control" step="0.01">
+                </div>
+                <div class="col-md-2">
+                    <label for="insurance">Insurance</label>
+                    <input type="number" id="insurance" name="insurance" class="form-control" step="0.01">
+                </div>
+
+                <!-- Inventory Service Costs Section -->
+               @*  <h5 class=" mt-3">Inventory service costs are made up of labor, equipment, handling, labeling, packaging, etc.</h5> *@
+                <div class="col-md-2">
+                    <label for="inventoryServiceCosts">Inventory Service Costs</label>
+                    <input type="number" id="inventoryServiceCosts" name="inventoryServiceCosts" class="form-control" step="0.01">
+                </div>
+
+                <!-- Capital Cost Section -->
+
+                @* <h5 class=" mt-3">Capital cost can be calculated by multiplying the average inventory value by the annual interest rate or the cost of capital.</h5> *@
+                <hr></hr>
+                <div class="col-md-2 ">
+                    <label for="capital">Capital</label>
+                    <input type="number" id="capital" name="capital" class="form-control" step="0.01">
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-2">
+                    <label for="holdingSumOfInventory">Holding Sum Of Inventory</label>
+                    <input type="number" id="holdingSumOfInventory" name="holdingSumOfInventory" class="form-control" readonly step="0.01">
+                </div>
+
+                <!-- Average Value of Inventory -->
+                <div class="col-md-2">
+                    <label for="averageValueOfInventory">Average Value of Inventory</label>
+                    <input type="number" id="averageValueOfInventory" name="averageValueOfInventory" class="form-control" step="0.01">
+                </div>
+
+                <!-- Carrying Cost Percentage -->
+                <div class="col-md-2">
+                    <label for="carryingCostPercentage">Carrying Cost per Unit</label>
+                    <input type="number" id="carryingCostPercentage" name="carryingCostPercentage" class="form-control" readonly step="0.01">
+                </div>
+                <div class="col-md-2">
+                    <label for="eoq">Economic Order Quantity (EOQ)</label>
+                    <input type="number" id="eoq" name="eoq" class="form-control" value="@Model.EconomicOrderQuantity" readonly step="0.01">
+                </div>
+
+
+            </div>
+
+            <hr class="mt-3" />
+
+            <!-- Buttons -->
+            <button type="button" id="calculateCarryingCost" class="btn btn-primary btn-sm mt-4 mb-3" style="margin-right:30px">Calculate E.Order Quantity</button>
+            <button type="submit" class="btn btn-success btn-sm mt-4 mb-3">Update E.O.Q</button>
+        </form>
+
+    </div>
+
+    <script>
+        document.getElementById('calculateCarryingCost').addEventListener('click', function () {
+            // Get values from the input fields, default to 0 if empty
+            let wages = parseFloat(document.getElementById('wages').value) || 0;
+            let utilityExpenses = parseFloat(document.getElementById('utilityExpenses').value) || 0;
+            let procurementExpenses = parseFloat(document.getElementById('procurementExpenses').value) || 0;
+            let ordersPerMonth = parseFloat(document.getElementById('ordersPerMonth').value) || 0;
+
+            // Calculate Final Ordering Cost per Order
+            let finalOrderingCostPerOrder = (wages + utilityExpenses + procurementExpenses) / (ordersPerMonth || 1); // Avoid division by zero
+            document.getElementById('finalOrderingCostPerOrder').value = finalOrderingCostPerOrder.toFixed(2);
+
+            // Get values for Holding Sum Of Inventory
+            let warehousingCosts = parseFloat(document.getElementById('warehousingCosts').value) || 0;
+            let insurance = parseFloat(document.getElementById('insurance').value) || 0;
+            let inventoryServiceCosts = parseFloat(document.getElementById('inventoryServiceCosts').value) || 0;
+            let capital = parseFloat(document.getElementById('capital').value) || 0;
+
+            // Calculate Holding Sum Of Inventory
+            let holdingSumOfInventory = warehousingCosts + insurance + inventoryServiceCosts + capital;
+            document.getElementById('holdingSumOfInventory').value = holdingSumOfInventory.toFixed(2);
+
+            // Get Average Value of Inventory
+            let averageValueOfInventory = parseFloat(document.getElementById('averageValueOfInventory').value) || 0;
+
+            // Calculate Carrying Cost Percentage
+            let carryingCostPercentage = (averageValueOfInventory !== 0) ? (holdingSumOfInventory / averageValueOfInventory) : 0;
+            document.getElementById('carryingCostPercentage').value = carryingCostPercentage.toFixed(2);
+
+            // Get Yearly Quantity Demand directly from the table field using id
+            let yearlyQuantityDemand = parseFloat(document.getElementById('yearlyQuantityDemand').textContent) || 0;
+            console.log("Yearly Quantity Demand:", yearlyQuantityDemand); // Log Yearly Quantity Demand
+
+            let carryingCostPerUnit = parseFloat(document.getElementById('carryingCostPercentage').value) || 0;
+
+            // Ensure the Carrying Cost per Unit is a non-zero value
+            if (carryingCostPerUnit > 0 && finalOrderingCostPerOrder > 0 && yearlyQuantityDemand > 0) {
+                // Calculate EOQ
+                let eoq = Math.sqrt((2 * yearlyQuantityDemand * finalOrderingCostPerOrder) / carryingCostPerUnit);
+                console.log("Economic Order Quantity (EOQ):", eoq.toFixed(2)); // Log EOQ
+
+                // Set EOQ in the readonly input field with id="eoq"
+                let eoqElement = document.getElementById('eoq');
+                if (eoqElement) {
+                    eoqElement.value = eoq.toFixed(2);
+                } else {
+                    console.error("EOQ element is missing in the DOM.");
+                }
+            } else {
+                let eoqElement = document.getElementById('eoq');
+                if (eoqElement) {
+                    eoqElement.value = "Invalid values";
+                }
+                console.error("Invalid values for EOQ calculation.");
+            }
+        });
+
+
+    </script>
+
+
+
+
+
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Parse model values from Razor
+            const modelData = {
+                avgLeadTimeInDays: parseFloat('@Model.AvgLeadTimeinDays'),
+                avgLeadTimeInMonths: parseFloat('@Model.AverageLeadTimeInMonths'),
+                stdDevMonthlyDemand: parseFloat('@Model.StandardDeviationOfMonthlyDemand')
+            };
+
+            // Get references to DOM elements
+            const serviceLevelSelect = document.getElementById('serviceLevelSelect');
+            const zFactorDisplay = document.getElementById('zFactorDisplay');
+            const safetyStockInput = document.getElementById('safetyStockInput');
+            const reorderPointInput = document.getElementById('reorderPointInput');
+            const calculateBtn = document.getElementById('calculateBtn');
+            const zFactorInput = document.getElementById('zFactorInput'); // Hidden input for ZFactor
+            const expectedServiceLevelInput = document.getElementById('expectedServiceLevelInput'); // Hidden input for Service Level
+
+            // Update Z-factor and Expected Service Level dynamically when dropdown changes
+            serviceLevelSelect.addEventListener('change', function () {
+                const selectedZFactor = parseFloat(serviceLevelSelect.value); // Z-factor from dropdown value
+                const selectedServiceLevel = serviceLevelSelect.options[serviceLevelSelect.selectedIndex].text.replace('%', ''); // Service Level as percentage
+
+                if (!isNaN(selectedZFactor)) {
+                    // Update the Z-factor display field
+                    zFactorDisplay.value = selectedZFactor;
+
+                    // Update hidden fields for form submission
+                    zFactorInput.value = selectedZFactor;
+                    expectedServiceLevelInput.value = parseFloat(selectedServiceLevel) / 100; // Convert percentage to decimal
+
+                    // Log updated Z-factor and Service Level
+                    console.log('Updated Values:');
+                    console.log('Z-Factor:', zFactorInput.value);
+                    console.log('Expected Service Level:', expectedServiceLevelInput.value);
+                } else {
+                    alert("Invalid Z-factor selected.");
+                }
+            });
+
+            // Calculate and update Safety Stock and Reorder Point
+            calculateBtn.addEventListener('click', function () {
+                const zFactor = parseFloat(serviceLevelSelect.value); // Get selected Z-factor
+
+                if (!isNaN(zFactor)) {
+                    // Calculate Safety Stock
+                    const safetyStock = zFactor * modelData.stdDevMonthlyDemand * Math.sqrt(modelData.avgLeadTimeInMonths);
+                    safetyStockInput.value = safetyStock.toFixed(2); // Update input field
+
+                    // Calculate Reorder Point
+                    const reorderPoint = (modelData.avgLeadTimeInDays * (modelData.stdDevMonthlyDemand / 30)) + safetyStock;
+                    reorderPointInput.value = reorderPoint.toFixed(2); // Update input field
+
+                    // Log calculated Safety Stock and Reorder Point
+                    console.log('Calculated Values:');
+                    console.log('Safety Stock:', safetyStockInput.value);
+                    console.log('Reorder Point:', reorderPointInput.value);
+                } else {
+                    alert("Invalid Z-factor selected.");
+                }
+            });
+
+            // Log all form data before submitting
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function (event) {
+                // Prevent the default form submission for debugging
+               // event.preventDefault();
+
+                console.log('Form Submission Data:');
+                console.log('Item Code:', form.querySelector('input[name="ItemCode"]').value);
+                console.log('Safety Stock:', safetyStockInput.value);
+                console.log('Reorder Point:', reorderPointInput.value);
+                console.log('Expected Service Level:', expectedServiceLevelInput.value);
+                console.log('Z-Factor:', zFactorInput.value);
+
+                // You can remove the event.preventDefault() line to allow actual submission once debugging is complete
+                this.submit();
+            });
+        });
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
